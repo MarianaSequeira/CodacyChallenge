@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class Repository {
 
-    private String name;
+    private String webURL;
     private ArrayList<String> branches;
     private HashMap<String, ArrayList<Commit>> commitsByBranch;
 
@@ -15,18 +15,21 @@ public class Repository {
         this.commitsByBranch = new HashMap<>();
     }
 
-    public Repository(String name, ArrayList<String> branches, HashMap<String, ArrayList<Commit>> commits) {
-        this.name = name;
+    public Repository(String webURL, ArrayList<String> branches, HashMap<String, ArrayList<Commit>> commits) {
+        this.webURL = webURL;
         this.branches = branches;
         this.commitsByBranch = commits;
     }
 
+    public Repository(String webURL) {
+        this.webURL = webURL;
+    }
 
     public String getName() {
-        return name;
+        return webURL;
     }
     public void setName(String name) {
-        this.name = name;
+        this.webURL = name;
     }
 
     public ArrayList<String> getBranches() {
@@ -44,9 +47,8 @@ public class Repository {
     }
 
 
-    public void addCommit(String branch, ArrayList<Commit> commit)  {
-        if (!commitsByBranch.containsKey(branch)) commitsByBranch.put(branch, new ArrayList<>());
-        commitsByBranch.get(branch).addAll(commit);
+    public void addBranchCommitList(String branch, ArrayList<Commit> commit)  {
+        commitsByBranch.put(branch, commit);
     }
 
 
