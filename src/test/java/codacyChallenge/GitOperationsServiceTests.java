@@ -2,7 +2,6 @@ package codacyChallenge;
 
 import codacyChallenge.model.Commit;
 import codacyChallenge.service.GitOperationsService;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
@@ -106,7 +105,7 @@ public class GitOperationsServiceTests {
         String branch = "";
         Mockito.doReturn(bufferedReader).when(gitOperationsService).executeCommand(String.format("git log %s", branch));
 
-        assertThat(gitOperationsService.getListOfCommits(branch).equals(commitList));
+        assertThat(gitOperationsService.getListOfCommits(branch).equals(commitList)).isEqualTo(true);
     }
 
 

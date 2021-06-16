@@ -7,11 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 class CodacyChallengeApplicationTests {
 
 	@Test
-	void validateWebURLTest() {
-	}
-
-	@Test
-	void validateNumberOfBranch() {
-
+	void contextLoads() {
 	}
 }

@@ -30,7 +30,6 @@ public class  GitLogParser {
 
         while ((line=buf.readLine())!=null)
         {
-            System.out.println(line);
             Matcher commitHashMatcher = commitHashPattern.matcher(line);
             if (commitHashMatcher.matches()) {
 
@@ -48,8 +47,10 @@ public class  GitLogParser {
                 if (authorNameMatcher.matches() || authorEmailMatcher.matches()) {
                     if (authorNameMatcher.matches()) {
                         currentCommit.setAuthorName(authorNameMatcher.group(1).trim());
+                        currentCommit.setAuthorEmail("");
                     }
-                    if (authorEmailMatcher.matches()) {
+                    if (authorNameMatcher.matches() && authorEmailMatcher.matches()) {
+                        currentCommit.setAuthorName(authorNameMatcher.group(1).trim());
                         String authorEmail = authorEmailMatcher.group(1).trim();
                         if (authorEmail.contains("@")) {
                             currentCommit.setAuthorEmail(authorEmail);
@@ -77,7 +78,9 @@ public class  GitLogParser {
             }
         }
 
-        if (!listCommits.contains(currentCommit)) listCommits.add(currentCommit);
+        if ( currentCommit != null && !listCommits.contains(currentCommit)) {
+            if (currentCommit.isValid()) listCommits.add(currentCommit);
+        }
 
         return listCommits;
     }

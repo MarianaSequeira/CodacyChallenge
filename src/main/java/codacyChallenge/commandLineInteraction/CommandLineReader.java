@@ -97,10 +97,10 @@ public class CommandLineReader implements CommandLineRunner {
 
 
     /*
-        Private method to allow to validate Web URL inserted by the user.
+        Method to allow to validate Web URL inserted by the user.
         //TODO: Think of more validations
      */
-    private boolean validateWebURL(String webURL) {
+    public boolean validateWebURL(String webURL) {
 
         if (!webURL.startsWith("http") || !webURL.contains("//github.com") || webURL.contains("\t")) {
             System.out.println("\t\t** ERROR ** The Web URL inserted is not valid. Please try again.");
@@ -111,10 +111,10 @@ public class CommandLineReader implements CommandLineRunner {
 
 
     /*
-        Private method to allow to validate the number of the branch inserted by the user.
+        Method to allow to validate the number of the branch inserted by the user.
         //TODO: Think of more validations
      */
-    private boolean validateNumberOfBranch(String index, int finalSize) {
+    public boolean validateNumberOfBranch(String index, int finalSize) {
 
         try {
             int i = Integer.parseInt(index);
