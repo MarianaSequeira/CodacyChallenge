@@ -9,5 +9,4 @@ class CodacyChallengeApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
