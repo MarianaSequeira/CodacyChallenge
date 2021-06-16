@@ -23,7 +23,9 @@ public class Repository {
 
     public Repository(String webURL) {
         this.webURL = webURL;
+        this.commitsByBranch = new HashMap<>();
     }
+
 
     public String getName() {
         return webURL;
@@ -52,4 +54,7 @@ public class Repository {
     }
 
 
+    public void printBranchCommitList(String branch) {
+        commitsByBranch.get(branch).forEach(System.out::println);
+    }
 }

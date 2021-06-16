@@ -60,12 +60,8 @@ public class Commit {
 
     @Override
     public String toString() {
-        return "Commit{" +
-                "sha='" + sha + '\'' +
-                ", authorName='" + authorName + '\'' +
-                ", authorEmail='" + authorEmail + '\'' +
-                ", date='" + date + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+
+        return String.format("|%-45s| Author: %-20s | Email: %-30s | Date: %30s | Description: %s", sha, authorName, authorEmail, date, description);
+
     }
 }

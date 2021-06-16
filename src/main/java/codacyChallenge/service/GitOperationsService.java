@@ -36,7 +36,6 @@ public class GitOperationsService {
 
 
     public ArrayList<String> listBranches() {
-        System.out.println("\nAvailable branches in the specified repo: ");
         ArrayList<String> results = new ArrayList<>();
 
         Runtime run = Runtime.getRuntime();
