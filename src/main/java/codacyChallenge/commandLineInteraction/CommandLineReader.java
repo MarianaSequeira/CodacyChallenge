@@ -2,23 +2,16 @@ package codacyChallenge.commandLineInteraction;
 
 import codacyChallenge.model.Repository;
 import codacyChallenge.service.GitOperationsService;
-import codacyChallenge.utils.GitLogParser;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 //  https://github.com/MarianaSequeira/WS_SpotifyStats.git
 
+@Profile("!test")
 @Component
 public class CommandLineReader implements CommandLineRunner {
 
@@ -33,19 +26,27 @@ public class CommandLineReader implements CommandLineRunner {
     public void run(String... args)  {
         Scanner sc = new Scanner(System.in);
 
-        while (true) {
-            System.out.println("\n\n=============================================================================================================================================================================================================================");
-            System.out.println("====================================================================================== GET THE LIST OF COMMITS FROM A REPOSITORY ============================================================================================");
-            System.out.println("=============================================================================================================================================================================================================================");
+        String helper = String.join("", Collections.nCopies(88, "="));
+        String helper2 = String.join("", Collections.nCopies(99, "="));
 
-            System.out.print("\nFirst enter the web URL of the git repository: ");
-            String webURL = sc.nextLine();
+        while (true) {
+
+            System.out.println("\n\n" +  String.join("", Collections.nCopies(220, "=")));
+            System.out.println(helper + "  GET THE LIST OF COMMITS FROM A REPOSITORY " + helper);
+            System.out.println(String.join("", Collections.nCopies(220, "=")));
+
 
 
             /* ------------------------ Validate Web URL and Clone the Selected Repo -------------------------------- */
 
-            if (validateWebURL(webURL)) this.gitOperationsService.cloneRepository(webURL);
-            else continue;
+            String webURL ;
+
+            do {
+                System.out.print("\nFirst enter the web URL of the git repository: ");
+                webURL = sc.nextLine().trim();
+            } while (!validateWebURL(webURL) || !this.gitOperationsService.cloneRepository(webURL));
+
+
 
             /*--------------------------------------------------------------------------------------------------------*/
 
@@ -56,6 +57,11 @@ public class CommandLineReader implements CommandLineRunner {
             /* -------------------------- Get and Print List of Branches of Repository  ----------------------------- */
 
             ArrayList<String> branches = this.gitOperationsService.listBranches();
+            if (branches == null) continue;
+            if (branches.isEmpty()) {
+                System.out.println("The specified repository has no branches. Please start again");
+                continue;
+            }
             repository.setBranches(branches);
 
             System.out.println("\nThe chosen repository has the following branches: ");
@@ -75,6 +81,7 @@ public class CommandLineReader implements CommandLineRunner {
             } while (!validateNumberOfBranch(index, branches.size()));
 
             String branch = branches.get(Integer.parseInt(index));
+
             /*--------------------------------------------------------------------------------------------------------*/
 
 
@@ -82,7 +89,7 @@ public class CommandLineReader implements CommandLineRunner {
             /* ----------------------------- Get List of Commits of Select Branch  ---------------------------------- */
 
             repository.addBranchCommitList(branch, this.gitOperationsService.getListOfCommits(branch));
-            System.out.println("\n================================================================================================= THE LIST OF COMMITS  ======================================================================================================\n");
+            System.out.println("\n" + helper2 + " THE LIST OF COMMITS  "+ helper2 +"\n");
             repository.printBranchCommitList(branch);
             /*--------------------------------------------------------------------------------------------------------*/
         }
@@ -91,12 +98,12 @@ public class CommandLineReader implements CommandLineRunner {
 
     /*
         Private method to allow to validate Web URL inserted by the user.
-        //TODO: Add more validations, if possible
+        //TODO: Think of more validations
      */
     private boolean validateWebURL(String webURL) {
 
-        if (!webURL.startsWith("http") || !webURL.contains("//github.com") || !webURL.endsWith(".git") || webURL.contains("\t")) {
-            System.out.println("** ERROR ** The Web URL inserted is not valid. Please try again.");
+        if (!webURL.startsWith("http") || !webURL.contains("//github.com") || webURL.contains("\t")) {
+            System.out.println("\t\t** ERROR ** The Web URL inserted is not valid. Please try again.");
             return false;
         }
         return true;
@@ -105,7 +112,7 @@ public class CommandLineReader implements CommandLineRunner {
 
     /*
         Private method to allow to validate the number of the branch inserted by the user.
-        //TODO: Add more validations, if possible
+        //TODO: Think of more validations
      */
     private boolean validateNumberOfBranch(String index, int finalSize) {
 
@@ -113,12 +120,12 @@ public class CommandLineReader implements CommandLineRunner {
             int i = Integer.parseInt(index);
 
             if ( i < 0 || i >= finalSize ) {
-                System.out.println("** ERROR ** The inserted option is not valid. Please try again.");
+                System.out.println("\t\t** ERROR ** The inserted option is not valid. Please try again.");
                 return false;
             }
 
         } catch (NumberFormatException e) {
-            System.out.println("** ERROR ** The inserted option is not a number. Please try again.");
+            System.out.println("\t\t** ERROR ** The inserted option is not a number. Please try again.");
             return false;
         }
 

@@ -30,6 +30,7 @@ public class  GitLogParser {
 
         while ((line=buf.readLine())!=null)
         {
+            System.out.println(line);
             Matcher commitHashMatcher = commitHashPattern.matcher(line);
             if (commitHashMatcher.matches()) {
 
@@ -70,9 +71,13 @@ public class  GitLogParser {
             else {
                 if (currentCommit == null)  continue;
 
-                if (line.startsWith("    "))  currentCommit.appendDescription(line.substring(4));
+                if (line.startsWith("    "))  {
+                    currentCommit.appendDescription(line.substring(4));
+                }
             }
         }
+
+        if (!listCommits.contains(currentCommit)) listCommits.add(currentCommit);
 
         return listCommits;
     }

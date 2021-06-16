@@ -54,6 +54,13 @@ public class Commit {
         this.date = date;
     }
 
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public void appendDescription(String append) {
         this.description += append;
     }
@@ -61,7 +68,7 @@ public class Commit {
     @Override
     public String toString() {
 
-        return String.format("|%-45s| Author: %-20s | Email: %-30s | Date: %30s | Description: %s", sha, authorName, authorEmail, date, description);
+        return String.format("%-45s| Author: %-20s | Email: %-30s | Date: %30s | Description: %s", sha, authorName, authorEmail, date, description);
 
     }
 }

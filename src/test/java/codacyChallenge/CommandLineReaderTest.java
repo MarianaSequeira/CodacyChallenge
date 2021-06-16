@@ -4,14 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CodacyChallengeApplicationTests {
+public class CommandLineReaderTest {
 
-	@Test
-	void validateWebURLTest() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
-	@Test
-	void validateNumberOfBranch() {
-
-	}
 }
