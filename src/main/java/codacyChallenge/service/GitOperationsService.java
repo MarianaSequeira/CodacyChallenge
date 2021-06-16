@@ -1,6 +1,7 @@
 package codacyChallenge.service;
 
 import codacyChallenge.model.Commit;
+import codacyChallenge.model.Repository;
 import codacyChallenge.utils.GitLogParser;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.stereotype.Service;
