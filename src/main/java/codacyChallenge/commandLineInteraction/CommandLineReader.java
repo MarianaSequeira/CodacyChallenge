@@ -2,6 +2,7 @@ package codacyChallenge.commandLineInteraction;
 
 import codacyChallenge.model.Repository;
 import codacyChallenge.service.GitOperationsService;
+import codacyChallenge.utils.InputValidation;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -44,7 +45,7 @@ public class CommandLineReader implements CommandLineRunner {
             do {
                 System.out.print("\nFirst enter the web URL of the git repository: ");
                 webURL = sc.nextLine().trim();
-            } while (!validateWebURL(webURL) || !this.gitOperationsService.cloneRepository(webURL));
+            } while (!InputValidation.validateWebURL(webURL) || !this.gitOperationsService.cloneRepository(webURL));
 
 
 
@@ -78,7 +79,7 @@ public class CommandLineReader implements CommandLineRunner {
             do {
                 System.out.print("\nInsert the number of the branch from which you want to get the list of commits: ");
                 index = sc.nextLine();
-            } while (!validateNumberOfBranch(index, branches.size()));
+            } while (!InputValidation.validateNumberOfBranch(index, branches.size()));
 
             String branch = branches.get(Integer.parseInt(index));
 
@@ -93,42 +94,5 @@ public class CommandLineReader implements CommandLineRunner {
             repository.printBranchCommitList(branch);
             /*--------------------------------------------------------------------------------------------------------*/
         }
-    }
-
-
-    /*
-        Method to allow to validate Web URL inserted by the user.
-        //TODO: Think of more validations
-     */
-    public boolean validateWebURL(String webURL) {
-
-        if (!webURL.startsWith("http") || !webURL.contains("//github.com") || webURL.contains("\t")) {
-            System.out.println("\t\t** ERROR ** The Web URL inserted is not valid. Please try again.");
-            return false;
-        }
-        return true;
-    }
-
-
-    /*
-        Method to allow to validate the number of the branch inserted by the user.
-        //TODO: Think of more validations
-     */
-    public boolean validateNumberOfBranch(String index, int finalSize) {
-
-        try {
-            int i = Integer.parseInt(index);
-
-            if ( i < 0 || i >= finalSize ) {
-                System.out.println("\t\t** ERROR ** The inserted option is not valid. Please try again.");
-                return false;
-            }
-
-        } catch (NumberFormatException e) {
-            System.out.println("\t\t** ERROR ** The inserted option is not a number. Please try again.");
-            return false;
-        }
-
-        return true;
     }
 }

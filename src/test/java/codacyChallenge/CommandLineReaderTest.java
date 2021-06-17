@@ -1,6 +1,7 @@
 package codacyChallenge;
 
 import codacyChallenge.commandLineInteraction.CommandLineReader;
+import codacyChallenge.utils.InputValidation;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
@@ -25,23 +26,23 @@ public class CommandLineReaderTest {
 
     @Test
     void validateWebURLTest() {
-        assertThat(commandLineReader.validateWebURL("")).isEqualTo(false);
-        assertThat(commandLineReader.validateWebURL("ups")).isEqualTo(false);
-        assertThat(commandLineReader.validateWebURL("github.com/MarianaSequeira/CatsPrivateRepo.git")).isEqualTo(false);
-        assertThat(commandLineReader.validateWebURL("https://CatsPrivateRepo.git")).isEqualTo(false);
-        assertThat(commandLineReader.validateWebURL("https://MarianaSequeira/CatsPrivateRepo.git")).isEqualTo(false);
-        assertThat(commandLineReader.validateWebURL("ssh://github.com/MarianaSequeira/CatsPrivateRepo.git")).isEqualTo(false);
+        assertThat(InputValidation.validateWebURL("")).isEqualTo(false);
+        assertThat(InputValidation.validateWebURL("ups")).isEqualTo(false);
+        assertThat(InputValidation.validateWebURL("github.com/MarianaSequeira/CatsPrivateRepo.git")).isEqualTo(false);
+        assertThat(InputValidation.validateWebURL("https://CatsPrivateRepo.git")).isEqualTo(false);
+        assertThat(InputValidation.validateWebURL("https://MarianaSequeira/CatsPrivateRepo.git")).isEqualTo(false);
+        assertThat(InputValidation.validateWebURL("ssh://github.com/MarianaSequeira/CatsPrivateRepo.git")).isEqualTo(false);
 
-        assertThat(commandLineReader.validateWebURL("https://github.com/MarianaSequeira/CatsPrivateRepo.git")).isEqualTo(true);
+        assertThat(InputValidation.validateWebURL("https://github.com/MarianaSequeira/CatsPrivateRepo.git")).isEqualTo(true);
     }
 
     @Test
     void validateNumberOfBranchTest() {
-        assertThat(commandLineReader.validateNumberOfBranch("a", 2)).isEqualTo(false);
-        assertThat(commandLineReader.validateNumberOfBranch("3", 2)).isEqualTo(false);
-        assertThat(commandLineReader.validateNumberOfBranch("2", 2)).isEqualTo(false);
-        assertThat(commandLineReader.validateNumberOfBranch("1", 2)).isEqualTo(true);
-        assertThat(commandLineReader.validateNumberOfBranch("0", 2)).isEqualTo(true);
+        assertThat(InputValidation.validateNumberOfBranch("a", 2)).isEqualTo(false);
+        assertThat(InputValidation.validateNumberOfBranch("3", 2)).isEqualTo(false);
+        assertThat(InputValidation.validateNumberOfBranch("2", 2)).isEqualTo(false);
+        assertThat(InputValidation.validateNumberOfBranch("1", 2)).isEqualTo(true);
+        assertThat(InputValidation.validateNumberOfBranch("0", 2)).isEqualTo(true);
 
     }
 

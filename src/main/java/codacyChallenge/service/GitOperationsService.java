@@ -86,6 +86,28 @@ public class GitOperationsService {
     }
 
 
+    public ArrayList<Commit> getCommitListPagination(int skip, String pageSize) {
+        ArrayList<Commit> commits;
+
+        BufferedReader success = this.executeCommand(String.format("git log --skip=%d -n %s", skip, pageSize));
+
+        if (success == null) {
+            System.out.println("\n\t\tError while getting commit list in pagination method." +
+                    "\n\t\tThis method assumes that a repository was previously cloned. Please start again.");
+            return null;
+        }
+
+        try {
+            commits = GitLogParser.parseGitLog(success);
+        } catch (IOException e) {
+            System.out.println("Error while getting commit list of branch ");
+            return null;
+        }
+
+        return commits;
+    }
+
+
     public void createTempRepoDirectory()  {
         try
         {
