@@ -1,5 +1,6 @@
 package codacyChallenge.service;
 
+import codacyChallenge.model.CloneStatus;
 import codacyChallenge.model.Commit;
 import codacyChallenge.model.Repository;
 import codacyChallenge.utils.GitLogParser;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 public class GitOperationsService {
 
     private Path path = Paths.get( Paths.get(System.getProperty("user.dir")).getParent() + "/tempRepo");
+    private CloneStatus cloneStatus = CloneStatus.INITIAL;
 
 
     public boolean cloneRepository(String webURL)  {
@@ -35,6 +37,14 @@ public class GitOperationsService {
         System.out.println("\tFinished!");
 
         return true;
+    }
+
+
+    public void asyncCloneRepository(String webUrl) {
+        this.cloneStatus = CloneStatus.CLONE_PENDING;
+        boolean success = this.cloneRepository(webUrl);
+        if (success)    this.cloneStatus = CloneStatus.CLONE_SUCCESS;
+        else            this.cloneStatus = CloneStatus.CLONE_FAILED;
     }
 
 
@@ -138,5 +148,13 @@ public class GitOperationsService {
         }
 
         return null;
+    }
+
+
+    public CloneStatus getCloneStatus() {
+        return cloneStatus;
+    }
+    public void setCloneStatus(CloneStatus cloneStatus) {
+        this.cloneStatus = cloneStatus;
     }
 }

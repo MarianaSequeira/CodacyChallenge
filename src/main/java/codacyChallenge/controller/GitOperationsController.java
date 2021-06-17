@@ -1,5 +1,6 @@
 package codacyChallenge.controller;
 
+import codacyChallenge.model.CloneStatus;
 import codacyChallenge.model.Commit;
 import codacyChallenge.model.Repository;
 import codacyChallenge.service.GitOperationsService;
@@ -10,15 +11,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping("/codacyChallenge/api")
 public class GitOperationsController {
 
     private GitOperationsService gitOperationsService;
-
     private String DEFAULT_PAGE_SIZE = "10";
-
     private Repository repository;
 
 
@@ -29,18 +33,27 @@ public class GitOperationsController {
 
     @GetMapping("/")
     public String index() {
-        return "Let's gooooo";
+        return "Let's go :D";
     }
 
 
     @GetMapping("/gitOp/cloneRepository")
     public ResponseEntity<Object> cloneRepository(@RequestParam(name = "webURL", required = true) String webURL) {
 
-        boolean success = gitOperationsService.cloneRepository(webURL);
+        CloneStatus status = this.gitOperationsService.getCloneStatus();
 
-        if (success) {
+        if (status.equals(CloneStatus.CLONE_PENDING)) return new ResponseEntity<>("Your last request is still being processed. ", HttpStatus.OK);
+
+        new Thread(() -> gitOperationsService.asyncCloneRepository(webURL)).start();
+
+        status = this.gitOperationsService.getCloneStatus();
+
+        if (status.equals(CloneStatus.CLONE_SUCCESS)) {
             this.repository = new Repository(webURL);
             return new ResponseEntity<>("Repository with Web URL " + webURL + " successfully cloned", HttpStatus.OK);
+        }
+        else if (status.equals(CloneStatus.CLONE_PENDING) || status.equals(CloneStatus.INITIAL)) {
+            return new ResponseEntity<>("Repository is cloning.. Just wait a little bit more!", HttpStatus.OK);
         }
         else {
             return new ResponseEntity<>("Error while cloning repository with Web URL " + webURL, HttpStatus.UNPROCESSABLE_ENTITY);
