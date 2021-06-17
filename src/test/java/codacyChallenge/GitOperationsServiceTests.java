@@ -81,7 +81,7 @@ public class GitOperationsServiceTests {
         ArrayList<String> branches = new ArrayList<>();
         branches.add("main");
 
-        assertThat(gitOperationsService.listBranches().equals(branches));
+        assertThat(gitOperationsService.listBranches().equals(branches)).isEqualTo(true);
     }
 
 
