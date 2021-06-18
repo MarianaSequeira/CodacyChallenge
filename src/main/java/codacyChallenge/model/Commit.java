@@ -1,14 +1,17 @@
 package codacyChallenge.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Commit {
 
     private String sha;
     private String authorName;
     private String authorEmail;
     private String date;
-    private String description;
+    private String message;
 
     public Commit() { }
 
@@ -18,12 +21,12 @@ public class Commit {
     }
 
 
-    public Commit(String sha, String authorName, String authorEmail, String date, String description) {
+    public Commit(String sha, String authorName, String authorEmail, String date, String message) {
         this.sha = sha;
         this.authorName = authorName;
         this.authorEmail = authorEmail;
         this.date = date;
-        this.description = description;
+        this.message = message;
     }
 
 
@@ -55,28 +58,28 @@ public class Commit {
         this.date = date;
     }
 
-    public String getDescription() {
-        return description;
+    public String getMessage() {
+        return message;
     }
-    public void setDescription(String description) {
-        this.description = description;
+    public void setMessage(String description) {
+        this.message = description;
     }
 
     public void appendDescription(String append) {
-        if (this.description == null) this.description = "";
-        this.description += append;
+        if (this.message == null) this.message = "";
+        this.message += append;
     }
 
     @Override
     public String toString() {
-        return String.format("%-45s| Author: %-20s | Email: %-30s | Date: %30s | Description: %s", sha, authorName, authorEmail, date, description);
+        return String.format("%-45s| Author: %-20s | Email: %-30s | Date: %30s | Description: %s", sha, authorName, authorEmail, date, message);
     }
 
     public boolean isValid() {
 
         if (authorName == null || authorName.isEmpty()) return false;
         if (date == null || date.isEmpty()) return false;
-        if (description == null || description.isEmpty()) return false;
+        if (message == null || message.isEmpty()) return false;
 
         return true;
     }
@@ -86,6 +89,6 @@ public class Commit {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Commit commit = (Commit) o;
-        return Objects.equals(sha, commit.sha) && Objects.equals(authorName, commit.authorName) && Objects.equals(date, commit.date) && Objects.equals(description, commit.description);
+        return Objects.equals(sha, commit.sha) && Objects.equals(authorName, commit.authorName) && Objects.equals(date, commit.date) && Objects.equals(message, commit.message);
     }
 }

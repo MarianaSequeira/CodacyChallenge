@@ -1,6 +1,10 @@
 package codacyChallenge.utils;
 
 import codacyChallenge.model.Commit;
+import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -83,5 +87,16 @@ public class  GitLogParser {
         }
 
         return listCommits;
+    }
+
+
+    public static MappingJackson2HttpMessageConverter getConverter() {
+        ObjectMapper mapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule("CommitDeserializer", new Version(1, 0, 0, null, null, null));
+        module.addDeserializer(Commit.class, new CommitDeserializer());
+        mapper.registerModule(module);
+
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setObjectMapper(mapper);
     }
 }

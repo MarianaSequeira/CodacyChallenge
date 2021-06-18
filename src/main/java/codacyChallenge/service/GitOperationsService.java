@@ -43,8 +43,8 @@ public class GitOperationsService {
     public void asyncCloneRepository(String webUrl) {
         this.cloneStatus = CloneStatus.CLONE_PENDING;
         boolean success = this.cloneRepository(webUrl);
-        if (success)    this.cloneStatus = CloneStatus.CLONE_SUCCESS;
-        else            this.cloneStatus = CloneStatus.CLONE_FAILED;
+        if (success)      this.cloneStatus = CloneStatus.CLONE_SUCCESS;
+        else              this.cloneStatus = CloneStatus.CLONE_FAILED;
     }
 
 
@@ -66,7 +66,6 @@ public class GitOperationsService {
             System.out.println("Error processing branches of repository");
             return null;
         }
-
 
         return results;
     }

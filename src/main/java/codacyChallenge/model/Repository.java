@@ -8,6 +8,7 @@ public class Repository {
     private String webURL;
     private ArrayList<String> branches;
     private HashMap<String, ArrayList<Commit>> commitsByBranch;
+    private CloneStatus status ;
 
 
     public Repository() {
@@ -48,6 +49,17 @@ public class Repository {
         this.commitsByBranch = commits;
     }
 
+    public CloneStatus isStatus() {
+        return status;
+    }
+
+    public CloneStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(CloneStatus status) {
+        this.status = status;
+    }
 
     public void addBranchCommitList(String branch, ArrayList<Commit> commit)  {
         commitsByBranch.put(branch, commit);
