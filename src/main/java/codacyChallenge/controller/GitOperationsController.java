@@ -22,8 +22,8 @@ import java.util.concurrent.Future;
 public class GitOperationsController {
 
     private GitOperationsService gitOperationsService;
-    private String DEFAULT_PAGE_SIZE = "10";
     private Repository repository;
+    private String url = "https://github.com/%s/%s";
 
 
     public GitOperationsController(GitOperationsService gitOperationsService) {
@@ -33,12 +33,15 @@ public class GitOperationsController {
 
     @GetMapping("/")
     public String index() {
-        return "Let's go :D";
+        return "Let's go!";
     }
 
 
-    @GetMapping("/gitOp/cloneRepository")
-    public ResponseEntity<Object> cloneRepository(@RequestParam(name = "webURL", required = true) String webURL) {
+    @GetMapping("/repos/{owner}/{repo}/clone")
+    public ResponseEntity<Object> cloneRepository(@PathVariable(name = "owner", required = true) String owner,
+                                                  @PathVariable(name = "repo", required = true) String repo) {
+
+        String webURL = String.format(url, owner, repo);
 
         CloneStatus status = this.gitOperationsService.getCloneStatus();
 
@@ -61,64 +64,65 @@ public class GitOperationsController {
     }
 
 
-    @GetMapping("/gitOp/branchesList")
-    public ResponseEntity<Object> getBranchesList(@RequestParam(name = "webURL", required = true) String webURL) {
+    @GetMapping("/repos/{owner}/{repo}/branches")
+    public ResponseEntity<Object> getBranchesList(@PathVariable(name = "owner", required = true) String owner,
+                                                  @PathVariable(name = "repo", required = true) String repo) {
 
         if ( repository == null)
             return new ResponseEntity<>("No cloned repository. ", HttpStatus.UNPROCESSABLE_ENTITY);
 
-        if (! webURL.equals(repository.getName()))
+        if (! String.format(url, owner, repo).equals(repository.getName()))
             return new ResponseEntity<>("The specified repository is not the same as the last cloned repository. ", HttpStatus.UNPROCESSABLE_ENTITY);
 
         ArrayList<String> branches = gitOperationsService.listBranches();
 
-        if (branches == null)         return new ResponseEntity<>("Error while getting the branch list of repository with Web URL " + webURL, HttpStatus.UNPROCESSABLE_ENTITY);
-        else if (branches.isEmpty())  return new ResponseEntity<>("System was not able to retrieve any branch from the repository with Web URL " + webURL, HttpStatus.OK);
+        if (branches == null)         return new ResponseEntity<>("Error while getting the branch list of "+owner+"'s "+ repo +" repository", HttpStatus.UNPROCESSABLE_ENTITY);
+        else if (branches.isEmpty())  return new ResponseEntity<>("System was not able to retrieve any branch from "+owner+"'s "+ repo +" repository", HttpStatus.OK);
         else                          return new ResponseEntity<>(branches, HttpStatus.OK);
     }
 
 
-    @GetMapping("/gitOp/allCommitsLists")
-    public ResponseEntity<Object> getAllCommitsList(@RequestParam(name = "webURL", required = true) String webURL,
-                                                    @RequestParam(name = "branchName", required = true) String branchName) {
+    //https://api.github.com/repos/MarianaSequeira/COEUS/commits?sha=dev
+    @GetMapping("/repos/{owner}/{repo}/allCommits")
+    public ResponseEntity<Object> getAllCommitsList(@PathVariable(name = "owner", required = true) String owner,
+                                                    @PathVariable(name = "repo", required = true) String repo,
+                                                    @RequestParam(name = "branch", required = true) String branch) {
 
-        if ( repository == null)
-            return new ResponseEntity<>("No cloned repository. ", HttpStatus.UNPROCESSABLE_ENTITY);
+        ResponseEntity<Object> obj = this.getBranchesList(owner, repo);
 
-        if (! webURL.equals(repository.getName()))
-            return new ResponseEntity<>("The specified repository is not the same as the last cloned repository. ", HttpStatus.UNPROCESSABLE_ENTITY);
+        if (!obj.getStatusCode().equals(HttpStatus.OK)) return obj;
+        if (! (obj.getBody() instanceof ArrayList ))    return obj;
 
-        ArrayList<String> branches = gitOperationsService.listBranches();
+        ArrayList<String> branches = (ArrayList<String>) getBranchesList(owner, repo).getBody();
 
-        if (branches == null || !branches.contains(branchName))
-            return new ResponseEntity<>("It was not possible to retrieve the branch '" + branchName + "' on the specified repository.", HttpStatus.UNPROCESSABLE_ENTITY);
+        if (branches == null || !branches.contains(branch))
+            return new ResponseEntity<>("It was not possible to retrieve the branch '" + branch + "' on the specified repository.", HttpStatus.UNPROCESSABLE_ENTITY);
 
-        ArrayList<Commit> commits = gitOperationsService.getListOfCommits(branchName);
+        ArrayList<Commit> commits = gitOperationsService.getListOfCommits(branch);
 
-        if ( commits == null )            return new ResponseEntity<>("Error while getting the commits from the branch " + branchName + " of the specified repository.", HttpStatus.UNPROCESSABLE_ENTITY);
-        else if ( commits.isEmpty() )     return new ResponseEntity<>("System was not able to retrieve any commit from the branch " + branchName + " of the specified repository.", HttpStatus.OK);
+        if ( commits == null )            return new ResponseEntity<>("Error while getting the commits from the branch " + branch + " of the specified repository.", HttpStatus.UNPROCESSABLE_ENTITY);
+        else if ( commits.isEmpty() )     return new ResponseEntity<>("System was not able to retrieve any commit from the branch " + branch + " of the specified repository.", HttpStatus.OK);
         else                              return new ResponseEntity<>(commits, HttpStatus.OK);
     }
 
 
-    @RequestMapping(value = {"/gitOp/commitListPagination/{page}", "/gitOp/commitListPagination/{page}/{pageSize}"})
-    public ResponseEntity<Object> getCommitListPagination(@RequestParam(name = "webURL", required = true) String webURL,
-                                                          @PathVariable(name = "page", required = true) String page,
-                                                          @PathVariable(name = "pageSize", required = false) String pageSize) {
+    @RequestMapping(value = {"/repos/{owner}/{repo}/commits"})
+    public ResponseEntity<Object> getCommitListPagination(@PathVariable(name = "owner", required = true) String owner,
+                                                          @PathVariable(name = "repo", required = true) String repo,
+                                                          @RequestParam(name = "page", required = true) String page,
+                                                          @RequestParam(name = "per_page", required = true, defaultValue = "10") String per_page) {
 
         if ( repository == null)
             return new ResponseEntity<>("No cloned repository. ", HttpStatus.UNPROCESSABLE_ENTITY);
 
-        if (! webURL.equals(repository.getName()))
+        if (! String.format(url, owner, repo).equals(repository.getName()))
             return new ResponseEntity<>("The specified repository is not the same as the last cloned repository. ", HttpStatus.UNPROCESSABLE_ENTITY);
 
-        if (pageSize == null || pageSize.equals("")) pageSize = DEFAULT_PAGE_SIZE;
-
-        if (!InputValidation.validatePageInformation(pageSize) || !InputValidation.validatePageInformation( page ))
+        if (!InputValidation.validatePageInformation(per_page) || !InputValidation.validatePageInformation( page ))
             return new ResponseEntity<>("The pageSize or the page parameters are not valid. ", HttpStatus.UNPROCESSABLE_ENTITY);
 
 
-        ArrayList<Commit> commits = gitOperationsService.getCommitListPagination(Integer.parseInt(pageSize) * Integer.parseInt(page), pageSize);
+        ArrayList<Commit> commits = gitOperationsService.getCommitListPagination(Integer.parseInt(per_page) * Integer.parseInt(page), per_page);
 
 
         if ( commits == null )            return new ResponseEntity<>("Error while getting the commits from the branch from page " + page + " of the specified repository.", HttpStatus.UNPROCESSABLE_ENTITY);

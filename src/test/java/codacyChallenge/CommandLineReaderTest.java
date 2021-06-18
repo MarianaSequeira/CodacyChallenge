@@ -1,10 +1,7 @@
 package codacyChallenge;
 
 import codacyChallenge.commandLineInteraction.CommandLineReader;
-<<<<<<< HEAD
-=======
 import codacyChallenge.utils.InputValidation;
->>>>>>> feature/HTTPAPIInteraction
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
