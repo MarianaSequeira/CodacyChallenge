@@ -98,5 +98,7 @@ public class  GitLogParser {
 
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         converter.setObjectMapper(mapper);
+
+        return converter;
     }
 }
