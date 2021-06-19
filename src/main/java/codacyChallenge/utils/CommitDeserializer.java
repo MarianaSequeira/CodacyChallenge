@@ -19,23 +19,6 @@ public class CommitDeserializer extends StdDeserializer<Commit> {
         super(vc);
     }
 
-    /*
-    "sha": "581afb153d8749867b0628c6f41bb88bd580d9a9",
-    "node_id": "MDY6Q29tbWl0Mjk2MDYwNDM2OjU4MWFmYjE1M2Q4NzQ5ODY3YjA2MjhjNmY0MWJiODhiZDU4MGQ5YTk=",
-    "commit": {
-        "author": {
-            "name": "sernadela",
-            "email": "pedro.sernadela@gmail.com",
-            "date": "2015-03-18T17:51:28Z"
-        },
-        "committer": {
-            "name": "sernadela",
-            "email": "pedro.sernadela@gmail.com",
-            "date": "2015-03-18T17:51:28Z"
-        },
-        "message": "Merge pull request #27 from bioinformatics-ua/enhancement/readme\n\nEnhancement/readme",
-     */
-
 
     @Override
     public Commit deserialize(JsonParser parser, DeserializationContext deserializer) throws IOException {

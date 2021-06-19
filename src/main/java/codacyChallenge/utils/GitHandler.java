@@ -62,8 +62,10 @@ public class GitHandler {
                     else if (operation.equals(Operation.LIST_ALL_COMMITS)) {
                         ArrayList<String> branches = gitOperationsService.listBranches();
 
-                        if (branches == null || !branches.contains(branch))
+                        if (branches == null || !branches.contains(branch)) {
                             output.setResult( new ResponseEntity<>("It was not possible to retrieve the branch '" + branch + "' on the specified repository.", HttpStatus.UNPROCESSABLE_ENTITY));
+                            break;
+                        }
 
                         ArrayList<Commit> commits = gitOperationsService.getListOfCommits(branch);
 
@@ -79,7 +81,6 @@ public class GitHandler {
                         else if ( commits.isEmpty() )     output.setResult(new ResponseEntity<>("System was not able to retrieve any commit from page " + page + " of the specified repository.", HttpStatus.OK));
                         else                              output.setResult(new ResponseEntity<>(commits, HttpStatus.OK));
                     }
-
                     break;
             }
         });

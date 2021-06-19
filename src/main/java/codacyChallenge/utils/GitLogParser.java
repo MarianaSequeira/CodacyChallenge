@@ -90,10 +90,22 @@ public class  GitLogParser {
     }
 
 
-    public static MappingJackson2HttpMessageConverter getConverter() {
+    public static MappingJackson2HttpMessageConverter getCommitConverter() {
         ObjectMapper mapper = new ObjectMapper();
         SimpleModule module = new SimpleModule("CommitDeserializer", new Version(1, 0, 0, null, null, null));
         module.addDeserializer(Commit.class, new CommitDeserializer());
+        mapper.registerModule(module);
+
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setObjectMapper(mapper);
+
+        return converter;
+    }
+
+    public static MappingJackson2HttpMessageConverter getBranchesConverter() {
+        ObjectMapper mapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule("BranchesDeserializer", new Version(1, 0, 0, null, null, null));
+        module.addDeserializer(String.class, new BranchesDeserializer());
         mapper.registerModule(module);
 
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();

@@ -4,14 +4,19 @@ import codacyChallenge.model.CloneStatus;
 import codacyChallenge.model.Commit;
 import codacyChallenge.model.Repository;
 import codacyChallenge.utils.GitLogParser;
+import org.apache.commons.io.IOUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.spec.PSource;
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @Service
 public class GitOperationsService {
@@ -61,7 +66,7 @@ public class GitOperationsService {
 
         try {
             String line = "";
-            while ((line=success.readLine())!=null)  results.add(line.trim().split("\\* ")[1]);
+            while ((line=success.readLine())!=null)  results.add(line.trim().replace("* ", ""));
         } catch (IOException e) {
             System.out.println("Error processing branches of repository");
             return null;
@@ -76,7 +81,7 @@ public class GitOperationsService {
 
         if (branch == null) return null;
 
-        BufferedReader success = this.executeCommand(String.format("git log %s", branch));
+        BufferedReader success = this.executeCommand(String.format("git --no-pager log %s", branch));
 
         if (success == null) {
             System.out.println("\n\t\tError while getting commit list of branch " + branch + "." +
@@ -98,7 +103,7 @@ public class GitOperationsService {
     public ArrayList<Commit> getCommitListPagination(int skip, String pageSize) {
         ArrayList<Commit> commits;
 
-        BufferedReader success = this.executeCommand(String.format("git log --skip=%d -n %s", skip, pageSize));
+        BufferedReader success = this.executeCommand(String.format("git --no-pager log --skip=%d -n %s", skip, pageSize));
 
         if (success == null) {
             System.out.println("\n\t\tError while getting commit list in pagination method." +
@@ -134,14 +139,17 @@ public class GitOperationsService {
         Runtime run = Runtime.getRuntime();
 
         try {
-            Process pr = run.exec(command, null, new File(String.valueOf(path)));
-            pr.waitFor();
+            Process process = run.exec(command, null, new File(String.valueOf(path)));
 
-            if (pr.exitValue() != 0) {
+            String stdout = IOUtils.toString(process.getInputStream(), Charset.defaultCharset());
+
+            int status = process.waitFor();
+
+            if (status != 0) {
                 return null;
             }
 
-            return new BufferedReader(new InputStreamReader(pr.getInputStream()));
+            return new BufferedReader( new StringReader(stdout));
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
