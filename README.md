@@ -31,7 +31,7 @@ Currently the system only supports public repositories.
 
    **Get Branches List**:
    
-This method allows to retrieve the list of branches from {owner}'s repository named {repo} 
+This method allows to retrieve the list of branches from `owner`'s repository named `repo` 
         
         $ GET codacyChallenge/api/repos/{owner}/{repo}/branches
 
@@ -39,7 +39,7 @@ This method allows to retrieve the list of branches from {owner}'s repository na
 
    **Get Branches List using GitHub API**:
    
-This method allows to retrieve the list of branches from {owner}'s repository named {repo}, using the GitHub API. If a error occurs during the request to the GitHub API, the system automatically redirects the request to the last enumerated PATH (fallback).
+This method allows to retrieve the list of branches from `owner`'s repository named `repo` , using the GitHub API. If an error occurs during the request to the GitHub API, the system automatically redirects the request to the last enumerated PATH (fallback).
 
         $ GET codacyChallenge/gitApi/repos/{owner}/{repo}/branches
 
@@ -47,7 +47,7 @@ This method allows to retrieve the list of branches from {owner}'s repository na
 
    **Get All Commit List**:
         
-This method allows to retrieve the list of commits from {owner}'s repository named {repo}, using the GitHub API. If you want you can specify the branch to list the commits from that specific branch. However, the branchName paremeter is not required, and the default behaviour is to return the commits from all the branches. 
+This method allows to retrieve the list of commits from `owner`'s repository named `repo` , using the GitHub API. If you want you can specify the branch to list the commits from that specific branch. However, the `branchName` paremeter is not required, and the default behaviour is to return the commits from all the branches. 
  
         $ GET codacyChallenge/api/repos/{owner}/{repo}/allCommits?sha={branchName}
 
@@ -56,7 +56,7 @@ This method allows to retrieve the list of commits from {owner}'s repository nam
 
    **Get All Commit List using GitHub API**:
    
-This method allows to retrieve the list of commits from {owner}'s repository named {repo}, using the GitHub API. If a error occurs during the request to the GitHub API, the system automatically redirects the request to the last enumerated PATH (fallback). If you want you can specify the branch to list the commits from that specific branch. However, the branchName paremeter is not required, and the default behaviour is to return the commits from all the branches. 
+This method allows to retrieve the list of commits from `owner`'s repository named `repo`, using the GitHub API. If an error occurs during the request to the GitHub API, the system automatically redirects the request to the last enumerated PATH (fallback). If you want you can specify the branch to list the commits from that specific branch. However, the `branchName` paremeter is not required, and the default behaviour is to return the commits from all the branches. 
         
         $ GET codacyChallenge/gitApi/repos/{owner}/{repo}/allCommits?sha={branchName}    
    
@@ -64,7 +64,7 @@ This method allows to retrieve the list of commits from {owner}'s repository nam
 
    **Get Commit List by Page**:
    
-This method allows to retrieve the list of commits by Page from {owner}'s repository named {repo}, using the GitHub API. The page and per_page parameters must be a positive integer.
+This method allows to retrieve the list of commits by Page from `owner`'s repository named `repo`, using the GitHub API. The page and per_page parameters must be a positive integer.
 
         $ GET codacyChallenge/api/repos/{owner}/{repo}/commits?page={page}&per_page={per_page}  
 
@@ -72,7 +72,7 @@ This method allows to retrieve the list of commits by Page from {owner}'s reposi
 
    **Get All Commit List by Page using GitHub API**:
         
-This method allows to retrieve the list of commits by Page from {owner}'s repository named {repo}, using the GitHub API. The page and per_page parameters must be a positive integer.
+This method allows to retrieve the list of commits by Page from `owner`'s repository named `repo`, using the GitHub API. The page and per_page parameters must be a positive integer.
          
         $ GET codacyChallenge/gitApi/repos/{owner}/{repo}/commits?page={page}&per_page={per_page}  
 
