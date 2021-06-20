@@ -92,7 +92,19 @@ public class GitHandler {
                     }
                     else if (operation.equals(Operation.LIST_COMMITS_PAGE)) {
 
-                        ArrayList<Commit> commits = gitOperationsService.getCommitListPagination(Integer.parseInt(per_page) * Integer.parseInt(page), per_page);
+                        int p = Integer.parseInt(page);
+
+                        int skip = (p == 0 || p == 1) ? 0 : p-1;
+
+//                        int skip = 0;
+//                        if (p==0 || p==1) {
+//                            skip=0;
+//                        }
+//                        else {
+//                            skip=p-1;
+//                        }
+
+                        ArrayList<Commit> commits = gitOperationsService.getCommitListPagination(Integer.parseInt(per_page) * skip, per_page);
 
                         if ( commits == null )            output.setResult(new ResponseEntity<>("Error while getting the commits from the branch from page " + page + " of the specified repository.", HttpStatus.UNPROCESSABLE_ENTITY));
                         else if ( commits.isEmpty() )     output.setResult(new ResponseEntity<>("System was not able to retrieve any commit from page " + page + " of the specified repository.", HttpStatus.OK));
