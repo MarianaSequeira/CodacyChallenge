@@ -96,14 +96,6 @@ public class GitHandler {
 
                         int skip = (p == 0 || p == 1) ? 0 : p-1;
 
-//                        int skip = 0;
-//                        if (p==0 || p==1) {
-//                            skip=0;
-//                        }
-//                        else {
-//                            skip=p-1;
-//                        }
-
                         ArrayList<Commit> commits = gitOperationsService.getCommitListPagination(Integer.parseInt(per_page) * skip, per_page);
 
                         if ( commits == null )            output.setResult(new ResponseEntity<>("Error while getting the commits from the branch from page " + page + " of the specified repository.", HttpStatus.UNPROCESSABLE_ENTITY));
