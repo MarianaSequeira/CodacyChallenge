@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
 @SpringBootTest
-public class CommandLineReaderTest {
+public class CommandLineReaderTests {
 
     @InjectMocks
     @Spy
