@@ -2,6 +2,7 @@ package codacyChallenge.utils;
 
 import codacyChallenge.model.CloneStatus;
 import codacyChallenge.model.Commit;
+import codacyChallenge.model.Operation;
 import codacyChallenge.model.Repository;
 import codacyChallenge.service.GitOperationsService;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,11 @@ public class GitHandler {
         this.gitOperationsService = gitOperationsService;
     }
 
+    /*
+        This method allows to retrieve the state associated to the clone of the repository specified.
+        Besides that if the current repository is null or the Web URL specified is different from the Web URL of the
+        last cloned repository, the system starts the process of cloning the repository.
+     */
     public CloneStatus handleClone(String webURL) {
         if (this.gitOperationsService.getCloneStatus().equals(CloneStatus.CLONE_PENDING)) return CloneStatus.CLONE_PENDING;
 
@@ -35,6 +41,17 @@ public class GitHandler {
 
     }
 
+
+    /*
+        This method allows to manage the process of cloning a repository based on the selected operation.
+        The first phase is where we verify if a clone with the specified Web URL is already cloned, and if not the system
+        starts the process of cloning. Because this process can take several minutes, we only proceed to the
+        execution of the initial operation when this process ends.
+        The a request is perform while another task is being fulfilled a warning is sent to the user, since this program
+        is currently structure so that only one cloned is perform at a time. This is actually a limitation of the system
+        introduced at the beginning of the implementation of this project. To fix that this handler and the GitOperationsService itself
+        would have to be modified, possibly through the thread implementation.
+     */
     public void handleCloneDependentRequests(DeferredResult<ResponseEntity<?>> output, String owner, String repo, String branch, String per_page, String page, Operation operation) {
         String url = "https://github.com/%s/%s";
         String webURL = String.format(url, owner, repo);

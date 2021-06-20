@@ -1,23 +1,14 @@
 package codacyChallenge.controller;
 
 import codacyChallenge.model.Commit;
+import codacyChallenge.model.Operation;
 import codacyChallenge.utils.*;
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.async.DeferredResult;
-
-import java.util.Arrays;
-import java.util.List;
 
 
 @RestController

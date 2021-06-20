@@ -24,6 +24,11 @@ public class  GitLogParser {
 
     }
 
+    /*
+        This method is responsible for getting the commits from the BufferedReader, and allows to retrieve the
+        commit list presented on the output of the 'git log' command.
+
+     */
     public static ArrayList<Commit> parseGitLog(BufferedReader buf) throws IOException {
 
         String line = "";
@@ -88,7 +93,6 @@ public class  GitLogParser {
 
         return listCommits;
     }
-
 
     public static MappingJackson2HttpMessageConverter getCommitConverter() {
         ObjectMapper mapper = new ObjectMapper();

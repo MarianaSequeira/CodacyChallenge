@@ -9,4 +9,6 @@ class CodacyChallengeApplicationTests {
 	@Test
 	void contextLoads() {
 	}
+
+	// TODO implement all the tests needed..
 }

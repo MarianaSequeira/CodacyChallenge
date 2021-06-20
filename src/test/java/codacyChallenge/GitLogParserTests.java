@@ -3,7 +3,6 @@ package codacyChallenge;
 import codacyChallenge.model.Commit;
 import codacyChallenge.utils.GitLogParser;
 import org.junit.jupiter.api.Test;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 

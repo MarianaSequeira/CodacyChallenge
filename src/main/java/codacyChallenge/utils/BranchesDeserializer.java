@@ -9,6 +9,9 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
 
+/*
+    This class is used to parse the information returned by the GitHub API.
+ */
 public class BranchesDeserializer extends StdDeserializer<String> {
 
     public BranchesDeserializer() {
