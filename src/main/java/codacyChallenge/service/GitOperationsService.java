@@ -2,16 +2,13 @@ package codacyChallenge.service;
 
 import codacyChallenge.model.CloneStatus;
 import codacyChallenge.model.Commit;
-import codacyChallenge.model.Repository;
 import codacyChallenge.utils.GitLogParser;
 import org.apache.commons.io.IOUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.spec.PSource;
 import java.io.*;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
